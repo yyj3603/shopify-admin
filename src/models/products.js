@@ -1,7 +1,8 @@
-import { getProducts } from '@/services/api';
-import { addProducts } from '@/services/api';
-import { removeProducts } from '@/services/api';
+import { getProducts , addProducts , removeProducts } from '@/services/api';
+
+
 import { routerRedux } from 'dva/router';
+
 const Model = {
   namespace: 'products',
 
@@ -13,8 +14,6 @@ const Model = {
   effects: {
     *fetch({}, { call, put }) {
       const response = yield call(getProducts);
-      console.log(response.headers.link);
-      console.log('ress-------');
       yield put({
         type: 'changeProducts',
         // payload: response.data.products,
@@ -31,13 +30,11 @@ const Model = {
       yield put(routerRedux.push('/products/productlist'));
     },
     *remove({ payload, callback }, { call, put }) {
-      for (var i = 0; i < payload.id.length; i++) {
-        const response = yield call(removeProducts, payload.id[i]);
+      for (let i = 0; i < payload.id.length; i++) {
+         yield call(removeProducts, payload.id[i]);
       }
       const response = yield call(getProducts);
       if (callback) callback();
-      console.log(response);
-      console.log('ress-------');
       yield put({
         type: 'changeProducts',
         payload: response,

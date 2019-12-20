@@ -4,10 +4,11 @@ import { connect } from 'dva';
 import StandardTable from '@/components/StandardTable';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import Link from 'umi/link';
-//import { Card } from 'antd';
-import styles from './TableList.less';
+// import { Card } from 'antd';
 import { Card, Button, InputNumber } from 'antd';
 import { router } from 'umi';
+import styles from './TableList.less';
+
 @connect(({ products, loading, link }) => ({
   products: products.products,
   link: products.link,
@@ -23,12 +24,13 @@ class Products extends Component {
       total: this.props.products.length,
     },
   };
+
   columns = [
     {
       title: '标题',
       dataIndex: 'title',
       key: 'title',
-      //render: text => <Link to={`/profile/basic/${text.replace(/\s+/gi, '-')}`}>{text}</Link>,
+      // render: text => <Link to={`/profile/basic/${text.replace(/\s+/gi, '-')}`}>{text}</Link>,
     },
     {
       title: '库存',
@@ -36,9 +38,9 @@ class Products extends Component {
       key: 'inventory',
       sorter: (a, b) => a.variants[0].inventory_quantity - b.variants[0].inventory_quantity,
       render: (val, rec) => {
-        var sum = 0;
-        for (var j = 0; j < rec.variants.length; j++) {
-          sum = sum + rec.variants[j].inventory_quantity;
+        let sum = 0;
+        for (let j = 0; j < rec.variants.length; j++) {
+          sum += rec.variants[j].inventory_quantity;
         }
         return sum;
       },
@@ -49,8 +51,8 @@ class Products extends Component {
       key: 'price',
       sorter: (a, b) => a.variants[0].price - b.variants[0].price,
       render: (val, rec) => {
-        var sum = 0;
-        sum = '$' + rec.variants[0].price;
+        let sum = 0;
+        sum = `$${  rec.variants[0].price}`;
         return sum;
       },
     },
@@ -60,12 +62,14 @@ class Products extends Component {
       key: 'vendor',
     },
   ];
+
   componentDidMount() {
     const { dispatch } = this.props;
     dispatch({
       type: 'products/fetch',
     });
   }
+
   handleStandardTableChange = (page, sorter) => {
     console.log(sorter);
     console.log('sorter------');
@@ -78,16 +82,19 @@ class Products extends Component {
       },
     });
   };
+
   handleSelectRows = rows => {
     this.setState({
       selectedRows: rows,
     });
   };
+
   handleModalVisible = flag => {
     this.setState({
       modalVisible: !!flag,
     });
   };
+
   handleDel() {
     const { dispatch } = this.props;
     const { selectedRows } = this.state;
@@ -104,6 +111,7 @@ class Products extends Component {
       },
     });
   }
+
   render() {
     const { loading } = this.props;
     const { products, link } = this.props;
@@ -115,10 +123,6 @@ class Products extends Component {
     };
     console.log(link);
     console.log('link-----');
-    const parentMethods = {
-      handleAdd: this.handleAdd,
-      handleModalVisible: this.handleModalVisible,
-    };
     return (
       <PageHeaderWrapper title="商品列表">
         <Card>

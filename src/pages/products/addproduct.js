@@ -1,24 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
 import {
-  Row,
-  Col,
   Card,
   Form,
   Input,
-  Select,
-  Icon,
   Button,
-  Dropdown,
-  Menu,
   InputNumber,
-  DatePicker,
-  Modal,
-  message,
-  Badge,
-  Divider,
-  Steps,
-  Radio,
 } from 'antd';
 
 const FormItem = Form.Item;
@@ -32,10 +19,10 @@ class Addprodct extends Component {
     const {
       form: { validateFields },
     } = this.props;
-    let product = this.props.form.getFieldsValue();
+    const product = this.props.form.getFieldsValue();
     validateFields(['title', 'vendor', 'inventory_quantity', 'price'], (err, values) => {
       if (err) return;
-      //若无error则继续进行表单提交
+      // 若无error则继续进行表单提交
       dispatch({
         type: 'products/add',
         payload: {
@@ -56,6 +43,7 @@ class Addprodct extends Component {
       alert('添加成功');
     });
   };
+
   render() {
     const { getFieldDecorator } = this.props.form;
     return (
