@@ -1,6 +1,55 @@
 import { stringify } from 'qs';
 import request from '@/utils/request';
+/*获取商品列表*/
+export async function getProducts() {
+  return request('/admin/api/2019-10/products.json');
+}
+/*获取订单*/
+export async function getOrders() {
+  return request('/admin/api/2019-10/orders.json');
+}
+/*删除订单*/
+export async function removeOrders(params) {
+  console.log(params);
+  return request(`/admin/api/2019-10/orders/${params}.json`, {
+    method: 'DELETE',
+  });
+}
+export async function queryORule(params) {
+  return request(`/api//2019-10/orders?${stringify(params)}`);
+}
 
+export async function removeORule(params) {
+  return request('/api/2019-10/orders', {
+    method: 'POST',
+    data: {
+      ...params,
+      method: 'delete',
+    },
+  });
+}
+
+export async function addORule(params) {
+  return request('/api/2019-10/orders', {
+    method: 'POST',
+    data: {
+      ...params,
+      method: 'post',
+    },
+  });
+}
+
+export async function updateORule(params = {}) {
+  return request(`/api/orders?${stringify(params.query)}`, {
+    method: 'POST',
+    data: {
+      ...params.body,
+      method: 'update',
+    },
+  });
+}
+
+/* */
 export async function queryProjectNotice() {
   return request('/api/project/notice');
 }

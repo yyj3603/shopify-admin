@@ -1,11 +1,11 @@
 /**
  * request 网络请求工具
- * 更详细的api文档: https://bigfish.alipay.com/doc/api#request
+ * 更详细的 api 文档: https://github.com/umijs/umi-request
  */
-import { extend } from 'umi-request';
-import { notification } from 'antd';
-import router from 'umi/router';
+ 
+import axios from 'axios';
 
+import { notification } from 'antd';
 const codeMessage = {
   200: '服务器成功返回请求的数据。',
   201: '新建或修改数据成功。',
@@ -27,46 +27,29 @@ const codeMessage = {
 /**
  * 异常处理程序
  */
-const errorHandler = error => {
-  const { response = {} } = error;
-  const errortext = codeMessage[response.status] || response.statusText;
-  const { status, url } = response;
+axios.interceptors.response.use(
+  response => response,
+  error => {
+    const { response } = error;
 
-  if (status === 401) {
-    notification.error({
-      message: '未登录或登录已过期，请重新登录。',
-    });
-    // @HACK
-    /* eslint-disable no-underscore-dangle */
-    window.g_app._store.dispatch({
-      type: 'login/logout',
-    });
-    return;
-  }
-  notification.error({
-    message: `请求错误 ${status}: ${url}`,
-    description: errortext,
-  });
-  // environment should not be used
-  if (status === 403) {
-    router.push('/exception/403');
-    return;
-  }
-  if (status <= 504 && status >= 500) {
-    router.push('/exception/500');
-    return;
-  }
-  if (status >= 404 && status < 422) {
-    router.push('/exception/404');
-  }
-};
+    if (response && response.status) {
+      const errorText = codeMessage[response.status] || response.statusText;
+      const { status, url } = response;
+      notification.error({
+        message: `请求错误 ${status}: ${url}`,
+        description: errorText,
+      });
+    } else if (!response) {
+      notification.error({
+        description: '您的网络发生异常，无法连接服务器',
+        message: '网络异常',
+      });
+    }
 
-/**
- * 配置request请求时的默认参数
- */
-const request = extend({
-  errorHandler, // 默认错误处理
-  credentials: 'include', // 默认请求是否带上cookie
-});
+    return response;
+  }
+);
 
-export default request;
+/* axios.defaults.headers['Authorization'] = 'Basic OTlkZjE2ZjViNWI1MTkyZWVlNWQ2ZDUwY2NhMzBmZjM6YWI5ZGMwY2RmNTBjNjlkN2E3MjM5MmNhMzJjODFkMzc=' */
+axios.defaults.headers['X-Shopify-Access-Token'] = 'e7948348240fd869c3293e9c10f10e96';
+export default axios;

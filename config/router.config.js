@@ -4,9 +4,20 @@ export default [
     path: '/user',
     component: '../layouts/UserLayout',
     routes: [
-      { path: '/user', redirect: '/user/login' },
-      { path: '/user/login', name: 'login', component: './User/Login' },
-      { path: '/user/register', name: 'register', component: './User/Register' },
+      {
+        path: '/user',
+        redirect: '/user/login',
+      },
+      {
+        path: '/user/login',
+        name: 'login',
+        component: './User/Login',
+      },
+      {
+        path: '/user/register',
+        name: 'register',
+        component: './User/Register',
+      },
       {
         path: '/user/register-result',
         name: 'register.result',
@@ -16,15 +27,47 @@ export default [
         component: '404',
       },
     ],
-  },
-  // app
+  }, // app
   {
     path: '/',
     component: '../layouts/BasicLayout',
     Routes: ['src/pages/Authorized'],
     routes: [
       // dashboard
-      { path: '/', redirect: '/dashboard/analysis', authority: ['admin', 'user'] },
+      {
+        path: '/',
+        redirect: '/dashboard/analysis',
+        authority: ['admin', 'user'],
+      },
+      {
+        path: '/products',
+        name: 'products',
+        icon: 'dashboard',
+        component: './Products',
+      },
+      {
+        path: '/orders',
+        name: 'orders',
+        icon: 'dashboard',
+        routes: [
+          {
+            path: '/orders',
+            name: 'orderlist',
+            component: './Orders',
+          },
+          {
+            path: '/orders/addorder',
+            name: 'addorder',
+            component: './orders/Addorder',
+          },
+        ],
+      },
+      {
+        path: '/customer',
+        name: 'customer',
+        icon: 'dashboard',
+        component: './Customer',
+      },
       {
         path: '/dashboard',
         name: 'dashboard',
@@ -46,8 +89,7 @@ export default [
             component: './Dashboard/Workplace',
           },
         ],
-      },
-      // forms
+      }, // forms
       {
         path: '/form',
         icon: 'form',
@@ -92,8 +134,7 @@ export default [
             component: './Forms/AdvancedForm',
           },
         ],
-      },
-      // list
+      }, // list
       {
         path: '/list',
         icon: 'table',
@@ -177,7 +218,11 @@ export default [
             name: 'success',
             component: './Result/Success',
           },
-          { path: '/result/fail', name: 'fail', component: './Result/Error' },
+          {
+            path: '/result/fail',
+            name: 'fail',
+            component: './Result/Error',
+          },
         ],
       },
       {
@@ -265,8 +310,7 @@ export default [
             ],
           },
         ],
-      },
-      //  editor
+      }, //  editor
       {
         name: 'editor',
         icon: 'highlight',
@@ -289,6 +333,12 @@ export default [
           },
         ],
       },
+      {
+        name: '空白页面',
+        path: '/emptypage',
+        component: './EmptyPage',
+      },
+
       {
         component: '404',
       },
