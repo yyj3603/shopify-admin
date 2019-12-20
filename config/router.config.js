@@ -26,6 +26,23 @@ export default [
       // dashboard
       { path: '/', redirect: '/dashboard/analysis', authority: ['admin', 'user'] },
       {
+        path: '/products',
+        name: 'products',
+        icon: 'dashboard',
+        routes: [
+          {
+            path: '/products/productlist',
+            name: 'productlist',
+            component: './Products',
+          },
+          {
+            path: '/products/addproduct',
+            name: 'addproduct',
+            component: './products/Addproduct',
+          },
+        ],
+      },
+      {
         path: '/dashboard',
         name: 'dashboard',
         icon: 'dashboard',

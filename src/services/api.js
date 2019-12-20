@@ -124,3 +124,20 @@ export async function queryNotices(params = {}) {
 export async function getFakeCaptcha(mobile) {
   return request(`/api/captcha?mobile=${mobile}`);
 }
+export async function getProducts() {
+  return request('/admin/api/2019-10/products.json?limit=10');
+}
+export async function addProducts(params) {
+  return request('/admin/api/2019-10/products.json', {
+    method: 'POST',
+    data: {
+      product: params,
+    },
+  });
+}
+export async function removeProducts(params) {
+  console.log(params);
+  return request(`/admin/api/2019-10/products/${params}.json`, {
+    method: 'DELETE',
+  });
+}

@@ -641,6 +641,7 @@ class TableList extends PureComponent {
       handleUpdateModalVisible: this.handleUpdateModalVisible,
       handleUpdate: this.handleUpdate,
     };
+
     return (
       <PageHeaderWrapper title="查询表格">
         <Card bordered={false}>
