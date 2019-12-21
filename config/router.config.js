@@ -69,6 +69,23 @@ export default [
         component: './Customer',
       },
       {
+        path: '/products',
+        name: 'products',
+        icon: 'dashboard',
+        routes: [
+          {
+            path: '/products/productlist',
+            name: 'productlist',
+            component: './Products',
+          },
+          {
+            path: '/products/addproduct',
+            name: 'addproduct',
+            component: './products/Addproduct',
+          },
+        ],
+      },
+      {
         path: '/dashboard',
         name: 'dashboard',
         icon: 'dashboard',

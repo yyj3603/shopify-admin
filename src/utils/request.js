@@ -2,10 +2,10 @@
  * request 网络请求工具
  * 更详细的 api 文档: https://github.com/umijs/umi-request
  */
- 
 import axios from 'axios';
 
 import { notification } from 'antd';
+
 const codeMessage = {
   200: '服务器成功返回请求的数据。',
   201: '新建或修改数据成功。',
@@ -50,6 +50,6 @@ axios.interceptors.response.use(
   }
 );
 
-/* axios.defaults.headers['Authorization'] = 'Basic OTlkZjE2ZjViNWI1MTkyZWVlNWQ2ZDUwY2NhMzBmZjM6YWI5ZGMwY2RmNTBjNjlkN2E3MjM5MmNhMzJjODFkMzc=' */
+// axios.defaults.headers['Authorization'] = 'Basic OTlkZjE2ZjViNWI1MTkyZWVlNWQ2ZDUwY2NhMzBmZjM6YWI5ZGMwY2RmNTBjNjlkN2E3MjM5MmNhMzJjODFkMzc='
 axios.defaults.headers['X-Shopify-Access-Token'] = 'e7948348240fd869c3293e9c10f10e96';
 export default axios;

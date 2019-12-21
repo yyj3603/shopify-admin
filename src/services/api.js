@@ -1,14 +1,11 @@
 import { stringify } from 'qs';
 import request from '@/utils/request';
-/*获取商品列表*/
-export async function getProducts() {
-  return request('/admin/api/2019-10/products.json');
-}
-/*获取订单*/
+
+/* 获取订单 */
 export async function getOrders() {
   return request('/admin/api/2019-10/orders.json');
 }
-/*删除订单*/
+/* 删除订单 */
 export async function removeOrders(params) {
   console.log(params);
   return request(`/admin/api/2019-10/orders/${params}.json`, {
@@ -172,4 +169,21 @@ export async function queryNotices(params = {}) {
 
 export async function getFakeCaptcha(mobile) {
   return request(`/api/captcha?mobile=${mobile}`);
+}
+export async function getProducts() {
+  return request('/admin/api/2019-10/products.json?limit=10');
+}
+export async function addProducts(params) {
+  return request('/admin/api/2019-10/products.json', {
+    method: 'POST',
+    data: {
+      product: params,
+    },
+  });
+}
+export async function removeProducts(params) {
+  console.log(params);
+  return request(`/admin/api/2019-10/products/${params}.json`, {
+    method: 'DELETE',
+  });
 }

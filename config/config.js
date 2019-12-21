@@ -79,7 +79,7 @@ export default {
     'primary-color': primaryColor,
   },
   proxy: {
-    '/admin/api/2019-10': {
+    '/admin/api/2019-10/': {
       target: 'https://yinyj.myshopify.com',
       changeOrigin: true,
     },

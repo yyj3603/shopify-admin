@@ -47,4 +47,6 @@ export default {
   'menu.orders.addorder': '添加订单',
   'menu.orders.orderlist': '订单列表',
   'menu.customer': '客户',
+  'menu.products.productlist': '商品列表',
+  'menu.products.addproduct': '添加商品',
 };
