@@ -1,6 +1,35 @@
 import { stringify } from 'qs';
 import request from '@/utils/request';
-
+/* 获取顾客 */
+export async function getCustomers() {
+  return request('/admin/api/2019-10/customers.json');
+}
+/* 添加顾客 */
+export async function addCustomers(params) {
+  return request('/admin/api/2019-10/customers.json', {
+    method: 'POST',
+    data: {
+      customer: params,
+    },
+  });
+}
+/* 编辑客户 */
+export async function updateCustomers(params) {
+  console.log(params);
+  return request(`/admin/api/2019-10/customers/${params}.json`, {
+    method: 'PUT',
+    data: {
+      customer: params.parpms,
+    },
+  });
+}
+/* 删除顾客 */
+export async function removeCustomers(params) {
+  console.log(params);
+  return request(`/admin/api/2019-10/customers/${params}.json`, {
+    method: 'DELETE',
+  });
+}
 /* 获取订单 */
 export async function getOrders() {
   return request('/admin/api/2019-10/orders.json');

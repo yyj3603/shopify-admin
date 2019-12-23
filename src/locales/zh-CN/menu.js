@@ -46,7 +46,11 @@ export default {
   'menu.orders': '订单页面',
   'menu.orders.addorder': '添加订单',
   'menu.orders.orderlist': '订单列表',
-  'menu.customer': '客户',
+  'menu.customers': '客户',
+  'menu.customers.customers': '客户列表',
+  'menu.customers.addcustomers': '添加客户',
+  'menu.customers.editcustomers': '编辑客户',
   'menu.products.productlist': '商品列表',
   'menu.products.addproduct': '添加商品',
+  
 };

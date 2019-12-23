@@ -1,54 +1,76 @@
-import { queryFakeList, removeFakeList, addFakeList, updateFakeList } from '@/services/api';
+import { queryFakeList, removeFakeList, addFakeList, updateFakeList,getCustomers,
+  addCustomers,removeCustomers,updateCustomers } from '@/services/api';
 
 export default {
   namespace: 'customers',
 
   state: {
-    customer: [],
+    customers: [],
+    availedit:[]
   },
 
   effects: {
-    *fetch({ payload }, { call, put }) {
-      const response = yield call(queryFakeList, payload);
+    *fetch({}, { call, put }) {
+      const response = yield call(getCustomers);
+      console.log('res', response);
       yield put({
-        type: 'queryList',
-        payload: Array.isArray(response) ? response : [],
+        type: 'changeCustomers',
+        payload: response.data.customers,
       });
     },
-    *appendFetch({ payload }, { call, put }) {
-      const response = yield call(queryFakeList, payload);
+    *add({ payload, callback }, { call, put }) {
+      console.log("11s")
+      const response = yield call(addCustomers, payload);
+      console.log("1")
+      const res=yield call(getCustomers)
       yield put({
-        type: 'appendList',
-        payload: Array.isArray(response) ? response : [],
+        type: ' changeCustomers',
+        payload: res,
       });
+      if (callback) callback();
+      yield put(routerRedux.push('/customers/customerlist'));
     },
-    *submit({ payload }, { call, put }) {
-      let callback;
-      if (payload.id) {
-        callback = Object.keys(payload).length === 1 ? removeFakeList : updateFakeList;
-      } else {
-        callback = addFakeList;
-      }
-      const response = yield call(callback, payload); // post
+    *remove({ payload, callback }, { call, put }) {
+     
+        yield call(removeCustomers, payload.id);
+      
+      const response = yield call(getCustomers);
+      if (callback) callback();
       yield put({
-        type: 'queryList',
+        type: 'changeCustomers',
         payload: response,
       });
+      if (callback) callback();
+      yield put(routerRedux.push('/customers/customerlist'));
+    },
+    *update({ payload, callback }, { call, put }) {
+      const response = yield call(updateCustomers, payload);
+      if (callback) callback();
+      const res = yield call(getCustomers);
+      yield put({
+        type: 'changeCustomers',
+        payload: res,
+      });
+      if (callback) callback();
+      yield put(routerRedux.push('/customers/editcustomers'));
+    },
+    *getedit({ apayload}, {  put }){
+      yield put({
+        type: 'changeAvailedit',
+        apayload:apayload ,
+      });
+     
+      yield put(routerRedux.push('/customers/editcustomers'));
     },
   },
 
   reducers: {
-    queryList(state, action) {
-      return {
-        ...state,
-        list: action.payload,
-      };
+    changeCustomers(state, { payload }) {
+      return { ...state, customers: payload };
     },
-    appendList(state, action) {
-      return {
-        ...state,
-        list: state.list.concat(action.payload),
-      };
-    },
+    changeAvailedit(state,{apayload}){
+      return {...state,availedit:apayload};
+    }
   },
+
 };

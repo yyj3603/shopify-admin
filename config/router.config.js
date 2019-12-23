@@ -63,10 +63,34 @@ export default [
         ],
       },
       {
-        path: '/customer',
-        name: 'customer',
+        path: '/customers',
+        name: 'customers',
         icon: 'dashboard',
-        component: './Customer',
+       /*  component: './Customer', */
+        routes: [
+          {
+            path: '/customers/customerlist',
+            name: 'customers',
+            component: './customer',
+      
+
+             
+            
+
+          },
+        
+          {
+            path: '/customers/addcustomers',
+            name: 'addcustomers',
+            component: './customer/Addcustomers',
+
+          },
+          {
+            path:'/customers/editcustomers',
+            name:'editcustomers',
+            component:'./customer/Editcustomers',
+          },
+        ],
       },
       {
         path: '/products',
