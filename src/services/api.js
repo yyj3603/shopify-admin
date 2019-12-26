@@ -1,6 +1,6 @@
 import { stringify } from 'qs';
 import request from '@/utils/request';
-
+const apiBase = 'https://mirror.viralbox.org/yinyj';
 export async function queryProjectNotice() {
   return request('/api/project/notice');
 }
@@ -125,10 +125,16 @@ export async function getFakeCaptcha(mobile) {
   return request(`/api/captcha?mobile=${mobile}`);
 }
 export async function getProducts() {
-  return request('/admin/api/2019-10/products.json?limit=10');
+  return request(`${apiBase}/admin/api/2019-10/products.json?query=&limit=10`);
+}
+export async function searchProducts(params) {
+  return request(`${apiBase}/admin/api/2019-10/products.json?query=&${params}limit=10`);
+}
+export async function getProductsbychange(params) {
+  return request(`${apiBase}/admin/api/2019-10/products.json?&limit=10&${params}`);
 }
 export async function addProducts(params) {
-  return request('/admin/api/2019-10/products.json', {
+  return request(`${apiBase}/admin/api/2019-10/products.json`, {
     method: 'POST',
     data: {
       product: params,
@@ -136,8 +142,18 @@ export async function addProducts(params) {
   });
 }
 export async function removeProducts(params) {
-  console.log(params);
-  return request(`/admin/api/2019-10/products/${params}.json`, {
+  return request(`${apiBase}/admin/api/2019-10/products/${params}.json`, {
     method: 'DELETE',
   });
+}
+export async function UpdateProduct(params) {
+  return request(`${apiBase}/admin/api/2019-10/products/${params.productskey}.json`, {
+    method: 'PUT',
+    data: {
+      product: params.parpms,
+    },
+  });
+}
+export async function allProduct() {
+  return request(`${apiBase}/admin/api/2019-10/products.json`);
 }

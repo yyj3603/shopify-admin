@@ -40,6 +40,11 @@ export default [
             name: 'addproduct',
             component: './products/Addproduct',
           },
+          {
+            path: '/products/editproduct',
+            name: 'editproduct',
+            component: './products/EditProduct',
+          },
         ],
       },
       {
