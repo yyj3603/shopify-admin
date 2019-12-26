@@ -20,6 +20,7 @@ const Model = {
     },
     *add({ payload, callback }, { call, put }) {
       const response = yield call(addProducts, payload);
+      console.log(response);
       yield put({
         type: 'save',
         payload: response,

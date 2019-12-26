@@ -14,6 +14,7 @@ class Addprodct extends Component {
       form: { validateFields },
     } = this.props;
     const product = this.props.form.getFieldsValue();
+    console.log(product);
     validateFields(['title', 'vendor', 'inventory_quantity', 'price'], (err, values) => {
       if (err) return;
       // 若无error则继续进行表单提交

@@ -60,6 +60,8 @@ if (ANT_DESIGN_PRO_ONLY_DO_NOT_USE_IN_YOUR_PRODUCTION === 'site') {
 }
 
 export default {
+  base: '/shopify-admin',
+  publicPath: '/shopify-admin/',
   // add for transfer to umi
   plugins,
   define: {
@@ -73,17 +75,14 @@ export default {
   devtool: ANT_DESIGN_PRO_ONLY_DO_NOT_USE_IN_YOUR_PRODUCTION ? 'source-map' : false,
   // 路由配置
   routes: pageRoutes,
+  history: 'hash',
+  hash: true,
   // Theme for antd
   // https://ant.design/docs/react/customize-theme-cn
   theme: {
     'primary-color': primaryColor,
   },
-  proxy: {
-    '/admin/api/2019-10/': {
-      target: 'https://yinyj.myshopify.com',
-      changeOrigin: true,
-    },
-  },
+
   ignoreMomentLocale: true,
   lessLoaderOptions: {
     javascriptEnabled: true,

@@ -1,10 +1,12 @@
+import { routerRedux } from 'dva/router';
 import {
   queryORule,
-  removeORule,
-  addORule,
+  addOrders,
   updateORule,
   removeOrders,
   getOrders,
+  allord,
+  searchOrders,
 } from '@/services/api';
 
 export default {
@@ -13,26 +15,49 @@ export default {
   state: {
     data: {
       orders: [],
-      list: [],
-      pagination: {},
     },
   },
 
   effects: {
-    *fetch({ payload }, { call, put }) {
-      const response = yield call(queryORule, payload);
+    *fetch({}, { call, put }) {
+      const response = yield call(getOrders);
       yield put({
-        type: 'save',
+        type: 'changeOrders',
         payload: response,
       });
     },
     *add({ payload, callback }, { call, put }) {
-      const response = yield call(addORule, payload);
+      const response = yield call(addOrders, payload);
+      console.log('payload');
+
       yield put({
         type: 'save',
         payload: response,
       });
       if (callback) callback();
+      yield put(routerRedux.push('/orders/orderlist'));
+    },
+    *allpro({ payload, callback }, { call, put }) {
+      const response = yield call(getOrders);
+      callback(response);
+    },
+    *search({ payload, callback }, { call, put }) {
+      let params = '';
+      console.log(payload.financial_status);
+      if (payload.financial_status !== undefined) {
+        params = params + 'financial_status=' + payload.financial_status + '&';
+        console.log(params);
+      }
+
+      if (payload.customer !== undefined) {
+        params = params + 'first_name=' + payload.customer + '&';
+      }
+      const response = yield call(searchOrders, params);
+
+      yield put({
+        type: 'changeOrders',
+        payload: response,
+      });
     },
     /* *remove({ payload, callback }, { call, put }) {
       const response = yield call(removeORule, payload);
@@ -43,16 +68,14 @@ export default {
       if (callback) callback();
     }, */
     *remove({ payload, callback }, { call, put }) {
-      for (var i = 0; i < payload.id.length; i++) {
-        const response = yield call(removeOrders, payload.id[i]);
+      for (let i = 0; i < payload.id.length; i++) {
+        yield call(removeOrders, payload.id[i]);
       }
       const response = yield call(getOrders);
       if (callback) callback();
-      console.log(response);
-      console.log('ress-------');
       yield put({
         type: 'changeOrders',
-        payload: response.data.Orders,
+        payload: response,
       });
     },
   },
@@ -66,11 +89,13 @@ export default {
   },
 
   reducers: {
-    save(state, action) {
-      return {
-        ...state,
-        data: action.payload,
-      };
+    changeOrders(state, { payload }) {
+      console.log(payload.data.orders);
+      console.log('payload.data.orders---');
+      return { ...state, orders: payload.data.orders };
+    },
+    save(state, { payload }) {
+      return { ...state, orders: [...state.orders, payload.data.orders] };
     },
   },
 };

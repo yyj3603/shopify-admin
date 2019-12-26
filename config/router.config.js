@@ -31,7 +31,7 @@ export default [
   {
     path: '/',
     component: '../layouts/BasicLayout',
-    Routes: ['src/pages/Authorized'],
+    /*  Routes: ['src/pages/Authorized'], */
     routes: [
       // dashboard
       {
@@ -51,7 +51,7 @@ export default [
         icon: 'dashboard',
         routes: [
           {
-            path: '/orders',
+            path: '/orders/orderlist',
             name: 'orderlist',
             component: './Orders',
           },
