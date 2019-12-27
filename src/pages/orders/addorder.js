@@ -24,7 +24,19 @@ class Addorder extends Component {
     res: [],
   };
 
-  addorder = () => {
+ 
+
+  componentDidMount() {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'orders/allproduct',
+      callback: val => {
+        this.setState({ res: val.data.products });
+      },
+    });
+  }
+  
+   addorder = () => {
     const { dispatch } = this.props;
     const {
       form: { validateFields },
@@ -59,15 +71,6 @@ class Addorder extends Component {
     });
   };
 
-  componentDidMount() {
-    const { dispatch } = this.props;
-    dispatch({
-      type: 'orders/allproduct',
-      callback: val => {
-        this.setState({ res: val.data.products });
-      },
-    });
-  }
 
   render() {
     const list = BuildvariantArray(this.state.res).map(item => {
