@@ -1,18 +1,7 @@
 import { stringify } from 'qs';
 import axios from 'axios';
 import request from '@/utils/request';
-/* 
-const shopName = 'yinyj'; //我的商店名字
-const apiBase = `https://mirror.viralbox.org/${shopName}/admin/api/2019-10`; //api根
-const access_token = 'e7948348240fd869c3293e9c10f10e96'; //认证 */
-/* 获取订单 */
-/* export async function getOrders() {
-  return axios.get(apiBase + '/orders.json', {
-    headers: {
-      'X-Shopify-Access-Token': access_token,
-    },
-  });
-} */
+
 const apiBase = 'https://mirror.viralbox.org/yinyj';
 export async function getOrders() {
   return request(`${apiBase}/admin/api/2019-10/orders.json`);
@@ -30,17 +19,7 @@ export async function getallporduct() {
 export async function searchOrders(params) {
   return request(`${apiBase}/admin/api/2019-10/orders.json?${params}limit=10`);
 }
-export async function getProducts() {
-  return request(`${apiBase}/admin/api/2019-10/products.json?limit=10`);
-}
-export async function addProducts(params) {
-  return request(`${apiBase}/admin/api/2019-10/products.json`, {
-    method: 'POST',
-    data: {
-      product: params,
-    },
-  });
-}
+
 export async function addOrders(params) {
   return request(`${apiBase}/admin/api/2019-10/orders.json`, {
     method: 'POST',
@@ -49,12 +28,7 @@ export async function addOrders(params) {
     },
   });
 }
-export async function removeProducts(params) {
-  console.log(params);
-  return request(`${apiBase}/admin/api/2019-10/products/${params}.json`, {
-    method: 'DELETE',
-  });
-}
+
 
 export async function queryORule(params) {
   return request(`/api//2019-10/orders?${stringify(params)}`);
@@ -91,6 +65,7 @@ export async function updateORule(params = {}) {
 }
 
 /* */
+
 export async function queryProjectNotice() {
   return request('/api/project/notice');
 }
@@ -213,4 +188,40 @@ export async function queryNotices(params = {}) {
 
 export async function getFakeCaptcha(mobile) {
   return request(`/api/captcha?mobile=${mobile}`);
+}
+
+
+
+export async function getProducts() {
+  return request(`${apiBase}/admin/api/2019-10/products.json?query=&limit=10`);
+}
+export async function searchProducts(params) {
+  return request(`${apiBase}/admin/api/2019-10/products.json?query=&${params}limit=10`);
+}
+export async function getProductsbychange(params) {
+  return request(`${apiBase}/admin/api/2019-10/products.json?&limit=10&${params}`);
+}
+export async function addProducts(params) {
+  return request(`${apiBase}/admin/api/2019-10/products.json`, {
+    method: 'POST',
+    data: {
+      product: params,
+    },
+  });
+}
+export async function removeProducts(params) {
+  return request(`${apiBase}/admin/api/2019-10/products/${params}.json`, {
+    method: 'DELETE',
+  });
+}
+export async function UpdateProduct(params) {
+  return request(`${apiBase}/admin/api/2019-10/products/${params.productskey}.json`, {
+    method: 'PUT',
+    data: {
+      product: params.parpms,
+    },
+  });
+}
+export async function allProduct() {
+  return request(`${apiBase}/admin/api/2019-10/products.json`);
 }

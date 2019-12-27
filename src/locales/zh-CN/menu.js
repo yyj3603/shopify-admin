@@ -49,4 +49,5 @@ export default {
   'menu.customer': '客户',
   'menu.products.productlist': '商品列表',
   'menu.products.addproduct': '添加商品',
+  'menu.products.editproduct': '编辑商品',
 };
