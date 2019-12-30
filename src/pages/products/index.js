@@ -111,6 +111,7 @@ class Products extends Component {
   handleSearch = e => {
     e.preventDefault();
     const { dispatch, form } = this.props;
+
     form.validateFields((err, fieldsValue) => {
       dispatch({
         type: 'products/search',
@@ -119,6 +120,8 @@ class Products extends Component {
           type: fieldsValue.type,
           vendor: fieldsValue.vendor,
           namelike: fieldsValue.namelike,
+          sort: fieldsValue.sort,
+          limit: fieldsValue.limit,
         },
       });
     });
@@ -137,20 +140,28 @@ class Products extends Component {
       form: { getFieldDecorator },
     } = this.props;
     const vendorlist = BuildvendorArray(this.state.res).map(item => {
-      return <Option value={item}>{item}</Option>;
+      return (
+        <Option value={item} key={item}>
+          {item}
+        </Option>
+      );
     });
     const typelist = BuildtypeArray(this.state.res).map(item => {
-      return <Option value={item}>{item}</Option>;
+      return (
+        <Option value={item} key={item}>
+          {item}
+        </Option>
+      );
     });
     return (
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
-          <Col md={6} sm={8}>
+          <Col md={8} sm={10}>
             <Form.Item label="商品名称">
               {getFieldDecorator('name')(<Input placeholder="请输入" />)}
             </Form.Item>
           </Col>
-          <Col md={6} sm={8}>
+          <Col md={8} sm={10}>
             <Form.Item label="商品类型">
               {getFieldDecorator('type')(
                 <Select placeholder="请选择" style={{ width: '120px' }}>
@@ -159,11 +170,58 @@ class Products extends Component {
               )}
             </Form.Item>
           </Col>
-          <Col md={6} sm={8}>
+          <Col md={8} sm={10}>
             <Form.Item label="供应商">
               {getFieldDecorator('vendor')(
                 <Select placeholder="请选择" style={{ width: '120px' }}>
                   {vendorlist}
+                </Select>
+              )}
+            </Form.Item>
+          </Col>
+          <Col md={8} sm={10}>
+            <Form.Item label="排序">
+              {getFieldDecorator('sort', {
+                initialValue: 'updated_at+desc',
+              })(
+                <Select placeholder="请选择" style={{ width: '150px' }}>
+                  <Select.Option value="updated_at+desc" key="updated_at+desc">
+                    更新时间降序
+                  </Select.Option>
+                  <Select.Option value="updated_at+asc" key="updated_at+asc">
+                    更新时间升序
+                  </Select.Option>
+                  <Select.Option value="created_at+desc" key="created_at+desc">
+                    创建时间降序
+                  </Select.Option>
+                  <Select.Option value="created_at+asc" key="created_at+asc">
+                    创建时间升序
+                  </Select.Option>
+                  <Select.Option value="title+desc" key="title+desc">
+                    商品名称降序
+                  </Select.Option>
+                  <Select.Option value="title+asc" key="title+asc">
+                    商品名称升序
+                  </Select.Option>
+                </Select>
+              )}
+            </Form.Item>
+          </Col>
+          <Col md={8} sm={10}>
+            <Form.Item label="排序">
+              {getFieldDecorator('limit', {
+                initialValue: 10,
+              })(
+                <Select initialValue="10" style={{ width: '150px' }}>
+                  <Select.Option value="10" key="10">
+                    10
+                  </Select.Option>
+                  <Select.Option value="8" key="8">
+                    8
+                  </Select.Option>
+                  <Select.Option value="5" key="5">
+                    5
+                  </Select.Option>
                 </Select>
               )}
             </Form.Item>

@@ -125,13 +125,17 @@ export async function getFakeCaptcha(mobile) {
   return request(`/api/captcha?mobile=${mobile}`);
 }
 export async function getProducts() {
-  return request(`${apiBase}/admin/api/2019-10/products.json?query=&limit=10`);
+  return request(
+    `${apiBase}/admin/api/2019-10/products.json?query=&limit=10&order=updated_at+desc`
+  );
 }
 export async function searchProducts(params) {
-  return request(`${apiBase}/admin/api/2019-10/products.json?query=&${params}limit=10`);
+  return request(`${apiBase}/admin/api/2019-10/products.json?query=&${params}`);
 }
 export async function getProductsbychange(params) {
-  return request(`${apiBase}/admin/api/2019-10/products.json?&limit=10&${params}`);
+  return request(
+    `${apiBase}/admin/api/2019-10/products.json?&limit=${params.limit}&${params.link}`
+  );
 }
 export async function addProducts(params) {
   return request(`${apiBase}/admin/api/2019-10/products.json`, {
@@ -151,6 +155,14 @@ export async function UpdateProduct(params) {
     method: 'PUT',
     data: {
       product: params.parpms,
+    },
+  });
+}
+export async function UpdateQuantity(params) {
+  return request(`${apiBase}/admin/api/2019-10/inventory_item/${params.productskey}.json`, {
+    method: 'POST',
+    data: {
+      inventory_item: params.parpms,
     },
   });
 }
