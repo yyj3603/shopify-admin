@@ -7,11 +7,11 @@ import {
   UpdateProduct,
   allProduct,
   searchProducts,
+  UpdateQuantity,
 } from '@/services/api';
 
 
-
-
+var limit = 10;
 const Model = {
   namespace: 'products',
 
@@ -51,7 +51,11 @@ const Model = {
       });
     },
     *changepage({ payload, callback }, { call, put }) {
-      const response = yield call(getProductsbychange, payload.link);
+      const params = {
+        link: payload.link,
+        limit: limit,
+      };
+      const response = yield call(getProductsbychange, params);
       if (callback) callback();
       yield put({
         type: 'changeProducts',
@@ -60,7 +64,6 @@ const Model = {
     },
     *update({ payload, callback }, { call, put }) {
       const response = yield call(UpdateProduct, payload);
-      console.log(response);
       if (callback) callback();
       const res = yield call(getProducts);
       yield put({
@@ -72,7 +75,6 @@ const Model = {
       let params = '';
       if (payload.name !== undefined) {
         params = params + 'title=' + payload.name + '&';
-        console.log(params);
       }
       if (payload.type !== undefined) {
         params = params + 'product_type=' + payload.type + '&';
@@ -80,7 +82,17 @@ const Model = {
       if (payload.vendor !== undefined) {
         params = params + 'vendor=' + payload.vendor + '&';
       }
+      params = params + 'order=' + payload.sort + '&';
+      params = params + 'limit=' + payload.limit;
+      limit = payload.limit;
       const response = yield call(searchProducts, params);
+      yield put({
+        type: 'changeProducts',
+        payload: response,
+      });
+    },
+    *UpdateQuantity({ payload, callback }, { call, put }) {
+      const response = yield call(UpdateQuantity, payload);
       yield put({
         type: 'changeProducts',
         payload: response,
