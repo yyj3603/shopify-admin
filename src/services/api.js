@@ -4,7 +4,7 @@ import request from '@/utils/request';
 
 const apiBase = 'https://mirror.viralbox.org/yinyj';
 export async function getOrders() {
-  return request(`${apiBase}/admin/api/2019-10/orders.json`);
+  return request(`${apiBase}/admin/api/2019-10/orders.json?query=&limit=10`);
 }
 /* 删除订单 */
 export async function removeOrders(params) {
@@ -28,7 +28,9 @@ export async function addOrders(params) {
     },
   });
 }
-
+export async function getOrdersbychange(params) {
+  return request(`${apiBase}/admin/api/2019-10/orders.json?&limit=10&${params}`);
+}
 
 export async function queryORule(params) {
   return request(`/api//2019-10/orders?${stringify(params)}`);

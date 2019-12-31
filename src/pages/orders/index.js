@@ -7,6 +7,7 @@ import Highlighter from 'react-highlight-words';
 import StandardTable from '@/components/StandardTable';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import styles from './orders.less';
+import FenYe from '@/components/FenYe'
 
 /* const FormItem = Form.Item; */
 const statusMap = ['pengding', 'paid'];
@@ -41,6 +42,7 @@ function BuildtypeArray(Arr) {
 @connect(({ orders, loading }) => ({
   orders: orders.orders,
   loading: loading.effects['orders/fetch'] || loading.effects['orders/search'],
+  link:orders.link
 }))
 @Form.create()
 class Orders extends Component {
@@ -155,6 +157,7 @@ class Orders extends Component {
       });
     });
   };
+  
   handleFormReset = () => {
     const { form, dispatch } = this.props;
     form.resetFields();
@@ -184,7 +187,18 @@ class Orders extends Component {
     });
   };
 
-  handleDel() {
+
+   handlechange = value => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'orders/changepage',
+      payload: {
+        link: value,
+      },
+    });
+  };
+
+    handleDel() {
     const { dispatch } = this.props;
     const { selectedRows } = this.state;
 
@@ -201,7 +215,7 @@ class Orders extends Component {
         });
       },
     });
-  }
+  } 
 
   renderSimpleForm() {
     const {
@@ -325,7 +339,7 @@ class Orders extends Component {
         ...this.getColumnSearchProps('total_price'),
       },
     ];
-    const { orders, loading } = this.props;
+    const { orders, loading ,link} = this.props;
     const { selectedRows } = this.state;
     const { params } = this.state;
     console.log(this.props.orders);
@@ -371,7 +385,9 @@ class Orders extends Component {
               onSelectRow={this.handleSelectRows}
               onChange={this.handleChange}
               rowKey="id"
+              pagination={false}
             />
+            <FenYe handlechange={this.handlechange} Link={link} /> 
           </Card>
         </PageHeaderWrapper>
       </div>

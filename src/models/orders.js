@@ -1,4 +1,3 @@
-import { getOrders } from '@/services/api';
 import {
   queryORule,
   addOrders,
@@ -7,12 +6,16 @@ import {
   allord,
   searchOrders,
   getallporduct,
+  getOrdersbychange,
+  getOrders
 } from '@/services/api';
+
 const Model = {
   namespace: 'orders',
 
   state: {
     orders: [],
+    link: ""
   },
 
   effects: {
@@ -21,7 +24,7 @@ const Model = {
       console.log('res', response);
       yield put({
         type: 'changeOrders',
-        payload: response.data.orders,
+        payload: response,
       });
     },
     *remove({ payload, callback }, { call, put }) {
@@ -32,7 +35,7 @@ const Model = {
       if (callback) callback();
       yield put({
         type: 'changeOrders',
-        payload: response.data.orders,
+        payload: response,
       });
     },
     *add({ payload, callback }, { call, put }) {
@@ -57,6 +60,13 @@ const Model = {
       console.log(response);
       callback(response);
     },
+    *changepage({ payload, callback }, { call, put }) {
+      const response = yield call(getOrdersbychange, payload.link);
+      if (callback) callback();
+      yield put({
+        type: 'changeOrders',
+        payload: response,
+      });},
     *search({ payload, callback }, { call, put }) {
       let params = '';
       console.log(payload.financial_status);
@@ -72,7 +82,7 @@ const Model = {
 
       yield put({
         type: 'changeOrders',
-        payload: response.data.orders,
+        payload: response,
       });
     },
     *update({ payload, callback }, { call, put }) {
@@ -87,7 +97,7 @@ const Model = {
 
   reducers: {
     changeOrders(state, { payload }) {
-      return { ...state, orders: payload };
+      return { ...state, orders: payload.data.orders,link:payload.headers.link };
     },
   },
 };

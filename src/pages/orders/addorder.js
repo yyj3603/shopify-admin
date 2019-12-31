@@ -95,19 +95,19 @@ class Addorder extends Component {
           <Form>
             <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="选择商品">
               {getFieldDecorator('variant_id', {
-                rules: [{ required: false }],
+                rules: [{ required: true,message: '商品不能为空', min: 1 }],
               })(<Select>{list}</Select>)}
             </FormItem>
 
             <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="数量">
               {getFieldDecorator('quantity', {
-                rules: [{ required: false }],
+                rules: [{ required: true,message:'数量不能为空',min:1 }],
               })(<Input placeholder="请输入数量" />)}
             </FormItem>
             <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="邮箱">
               {getFieldDecorator('email', {
                 rules: [{ required: false }],
-              })(<Input placeholder="请输入邮箱" />)}
+              })(<Input placeholder="请输入正确格式的邮箱" />)}
             </FormItem>
             <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="顾客姓">
               {getFieldDecorator('first_name', {
@@ -121,7 +121,7 @@ class Addorder extends Component {
             </FormItem>
             <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="付款状态">
               {getFieldDecorator('financial_status', {
-                rules: [{ required: false }],
+                rules: [{ required: true,message:'请选择付款状态',min:1 }],
               })(<Cascader options={options} placeholder="请选择付款状态" />)}
             </FormItem>
 
