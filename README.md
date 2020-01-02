@@ -4,7 +4,7 @@
 项目原型地址：
 <a href="https://mrlinry.github.io/Train/%E5%8E%9F%E5%9E%8B/index.html">原型点此预览</a>
 测试文档地址：
-<a href=" https://github.com/yyj3603/shopify-admin/blob/master/test.md">测试文档点此浏览</a>
+<a href="https://github.com/yyj3603/shopify-admin/blob/master/test.md">测试文档点此浏览</a>
 <br />账号为：lry 密码为：123
 <br />
 每周进度<br />
