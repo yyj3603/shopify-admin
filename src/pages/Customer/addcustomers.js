@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Card, Select, Form, Badge, Button } from 'antd';
+import { Card, Select, Form, Badge, Button,Tag } from 'antd';
 import { connect } from 'dva';
 import StandardTable from '@/components/StandardTable';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
@@ -11,7 +11,7 @@ import Link from 'umi/link';
 
 @connect(({ customers, loading }) => ({
   customers: customers.customers,
-
+ tags:customers.tags,
   loading: loading.effects['customers/fetch'],
 }))
 
@@ -28,8 +28,15 @@ class Addcustomers extends Component {
   var index=opv.selectedIndex;
   var gv=opv.value;
   var gt=opv[index].text;
-  console.log('====',gv,gt)
-  console.log('====',gv,gt)
+  console.log('====',gv,gt);
+  console.log('====',gv,gt);
+  var tags=document.getElementById('tags').value;
+  var mytags;
+  if(this.props.tags.length>0){
+    for(var z=0;z<this.props.tags.length;z++){
+        tags=tags+','+this.props.tags[z]
+    }
+  }
   dispatch({
     type:'customers/add',
     payload:{
@@ -38,7 +45,7 @@ class Addcustomers extends Component {
       email: document.getElementById('email').value,
       phone:'+'+document.getElementById('phonenumber').value,
       verified_email: true,
-      tags:document.getElementById('tags').value,
+      tags:tags,
       note:document.getElementById('note').value,
       addresses: [
         {
@@ -56,7 +63,29 @@ class Addcustomers extends Component {
   })
   alert('添加成功');
  }
-
+handleTag=(tag)=>{
+  console.log('可以这么操作：',tag);
+  var temp=[];
+  for(var j=0;j<this.props.tags.length;j++){
+    if(this.props.tags[j]!==tag){
+          temp.push(this.props.tags[j])
+    }
+  }
+  this.setState({arrtags:temp});
+  const { dispatch } = this.props;
+  
+  console.log(',,,,', this.state.arrtags);
+  dispatch({
+    type: 'customers/gettags',
+    agpayload: 
+    temp
+  /*    callback: () => {
+      this.setState({
+        selectedRowKeys: [],
+      });
+    }, */
+  });
+}
 
 
  handleClick=(state,b)=>{
@@ -64,10 +93,19 @@ class Addcustomers extends Component {
  var b1=  document.getElementById('lab1').innerHTML;
  console.log(b1);
  if(this.state.tagsInput==null||this.state.tagsInput==""){
-this.state.tagsInput=state.tagsInput+b1; 
+this.state.tagsInput=b1; 
+this.state.arrtags=[this.state.tagsInput];
+
+
  }else{
   this.state.tagsInput=state.tagsInput+","+b1; 
-  this.state.arrtags=this.state.tagsInput.split(',')
+ var t=this.state.tagsInput.split(',');
+ var list=new Set(t);
+ this.state.arrtags=Array.from(list);
+
+
+  
+
 }
  console.log(this.state.tagsInput,this.state.arrtags)
    }
@@ -75,14 +113,34 @@ this.state.tagsInput=state.tagsInput+b1;
     var b2=  document.getElementById('lab2').innerHTML;
     console.log(b2);
     if(this.state.tagsInput==null||this.state.tagsInput==""){
-   this.state.tagsInput=state.tagsInput+b2; 
+   this.state.tagsInput=b2; 
+   this.state.arrtags=[this.state.tagsInput];
+
+  
     }else{
       this.state.tagsInput=state.tagsInput+","+b2; 
-      this.state.arrtags=this.state.tagsInput.split(',')
-    }
-    console.log(this.state.tagsInput,this.state.arrtags)
-      }
+      var t=this.state.tagsInput.split(',');
+      var list=new Set(t);
+      this.state.arrtags=Array.from(list);
 
+   
+    }
+    console.log(this.state.tagsInput,this.state.arrtags);
+
+      }
+      const { dispatch } = this.props;
+  
+      console.log(',,,,', this.state.arrtags);
+      dispatch({
+        type: 'customers/gettags',
+        agpayload: 
+        this.state.arrtags
+      /*    callback: () => {
+          this.setState({
+            selectedRowKeys: [],
+          });
+        }, */
+      });
  }
 
     render() {
@@ -201,14 +259,7 @@ this.state.tagsInput=state.tagsInput+b1;
                             <input id='alastname' />
                           </div>
                      </div>
-                     <div style={{width:'560px'}}>
-                           <div>
-                            <label >Company</label>
-                          </div>
-                          <div>
-                            <input style={{width:'555px'}} id='company'/>
-                          </div>
-                     </div>
+                  
                      <div style={{width:'560px'}}>
                            <div>
                             <label >Address</label>
@@ -301,7 +352,7 @@ this.state.tagsInput=state.tagsInput+b1;
                </div>
             </div>
             <br />
-            <div style={{
+          {/*   <div style={{
                      width:'1000px',
                      height:'200px',
                      display:'flex',
@@ -323,7 +374,7 @@ this.state.tagsInput=state.tagsInput+b1;
                  </Card>
                </div>
             </div>
-            <br />
+            <br /> */}
             <div style={{
                      width:'1000px',
                      height:'200px',
@@ -377,7 +428,11 @@ this.state.tagsInput=state.tagsInput+b1;
                             <label >Tags</label>
                           </div>
                           <div>
-                            <div></div>
+                            <div>
+                           { console.log('tags----',this.props.tags)/* .map(tag=> <Tag >{tag}</Tag>) */ }
+                          { this.props.tags.map(tag=><Tag onClick={()=>this.handleTag(tag)} color={ 'green'}>{tag}</Tag>)}
+                            
+                            </div>
                             <input style={{width:'560px'}} id='tags' />
                             
                                
@@ -420,7 +475,7 @@ this.state.tagsInput=state.tagsInput+b1;
               }}
            >
           
-             <Button type='primary' >Cancel</Button>
+             <Link to='/customers/customerlist'><Button type='primary' >Cancel</Button></Link>
              <Button type='primary' onClick={this.addCustomers}>Save</Button>
            
        

@@ -16,10 +16,10 @@ export async function addCustomers(params) {
 /* 编辑客户 */
 export async function updateCustomers(params) {
   console.log(params);
-  return request(`/admin/api/2019-10/customers/${params}.json`, {
+  return request(`/admin/api/2019-10/customers/${params.id}.json`, {
     method: 'PUT',
     data: {
-      customer: params.parpms,
+      customer: params,
     },
   });
 }

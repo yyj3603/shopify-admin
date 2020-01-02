@@ -6,7 +6,9 @@ export default {
 
   state: {
     customers: [],
-    availedit:[]
+    availedit:[],
+    availindexdata:[],
+    tags:[]
   },
 
   effects: {
@@ -16,6 +18,15 @@ export default {
       yield put({
         type: 'changeCustomers',
         payload: response.data.customers,
+      });
+ 
+    },
+    *getavail({}, { call, put }) {
+      const response = yield call(getCustomers);
+      console.log('res', response);
+      yield put({
+        type: 'changeAvailindexdata',
+        aipayload: response.data.customers,
       });
     },
     *add({ payload, callback }, { call, put }) {
@@ -55,12 +66,31 @@ export default {
       yield put(routerRedux.push('/customers/editcustomers'));
     },
     *getedit({ apayload}, {  put }){
+      console.log("-------")
+      console.log(apayload)
+      console.log("-------")
       yield put({
         type: 'changeAvailedit',
         apayload:apayload ,
       });
      
       yield put(routerRedux.push('/customers/editcustomers'));
+    },
+    *getavailindexdata({ aipayload,callback}, {  put }){
+      yield put({
+        type: 'changeAvailindexdata',
+        aipayload:aipayload ,
+      });
+      if (callback) callback();
+      yield put(routerRedux.push('/customers/editcustomers'));
+    },
+    *gettags({ agpayload,callback}, {  put }){
+      yield put({
+        type: 'changeAddTags',
+        agpayload:agpayload ,
+      });
+      if (callback) callback();
+      yield put(routerRedux.push('/customers/addcustomers'));
     },
   },
 
@@ -70,6 +100,12 @@ export default {
     },
     changeAvailedit(state,{apayload}){
       return {...state,availedit:apayload};
+    },
+    changeAvailindexdata(state,{aipayload}){
+      return {...state,availindexdata:aipayload};
+    },
+    changeAddTags(state,{agpayload}){
+      return {...state,tags:agpayload};
     }
   },
 

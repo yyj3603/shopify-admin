@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Card, Select, Form, Badge, Button,Table,Tag,Divider,Popconfirm } from 'antd';
+import { Card, Select, Form, Badge, Button,Table,Tag,Divider,Popconfirm,Input } from 'antd';
 import { connect } from 'dva';
 import StandardTable from '@/components/StandardTable';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
@@ -9,12 +9,12 @@ const statusMap = ['pengding', 'paid'];
 const { Option } = Select;
 import Link from 'umi/link';
 import { getCustomers } from '@/services/api';
-
+import styles from './index.less';
 
 
 @connect(({ customers, loading }) => ({
   customers: customers.customers,
-
+  avaicustomers:customers.availindexdata,
   loading: loading.effects['customers/fetch'],
 }))
 
@@ -22,33 +22,220 @@ class Customers extends Component {
   state = {
     selectedRowKeys: [], // Check here to configure the default column
     selectedRows:[],
-    pagination:{ 
-     /*  currentPage: page, */
-      pageSize: 10,
-      simple: false,
-      total: this.props.customers.length,
-      showQuickJumper:'howQuickJumper',
-       defaultCurrent:1
-      }
+    filtervalue:0,
+    searchinput:'',
+    filtercustomers:[],
+    sortvalue:0
+
   };
 
   /* --------------------- */
   onSelectChange = (selectedRowKeys,selectedRows) => {
-    console.log('selectedRowKeys changed: ', selectedRowKeys);
+
     this.setState({ selectedRowKeys });
-    console.log('selectedRowKeysID: ', selectedRowKeys);
+    console.log('selectedRowKeys: ', selectedRowKeys);
     this.setState({ selectedRows });
-    console.log('selectedRowKeysID: ', selectedRows);
+    console.log('selectedRows: ', selectedRows);
   };
+
  /* ---------------------------- */
+handleSearch=(value)=>{
+  this.setState({searchinput:value})
+  console.log('opt:',this.state.filtervalue,value)
+  if(value==''||value==null){
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'customers/getavailindexdata',
+      aipayload: 
+        this.props.customers,
+      /* callback: () => {
+        this.setState({
+          filtercustomers: [],
+        });
+      }, */
+    });
+  }else
+  if(this.state.filtervalue==0){
+    var temp=this.props.customers;
+    var temp1=[];
+    for(var i=0;i<temp.length;i++){
+      if(temp[i].first_name==value||temp[i].first_name+temp[i].last_name==value
+          ||temp[i].orders_count==value||temp[i].total_spent==value
+        ){
+        temp1.push(temp[i]);
+        
+      }
+    }
+    console.log('temp1',temp1);
+    this.state.filtercustomers=temp1;
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'customers/getavailindexdata',
+      aipayload: 
+        temp1,
+      /* callback: () => {
+        this.setState({
+          filtercustomers: [],
+        });
+      }, */
+    });
+  }else   if(this.state.filtervalue==1){
+    var temp=this.props.customers;
+    var temp1=[];
+    for(var i=0;i<temp.length;i++){
+      if(temp[i].total_spent==value){
+        temp1.push(temp[i])
+      }
+    }
+    console.log('temp1',temp1);
+    this.state.filtercustomers=temp1;
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'customers/getavailindexdata',
+      aipayload: 
+        temp1,
+      /* callback: () => {
+        this.setState({
+          filtercustomers: [],
+        });
+      }, */
+    });
+  }
+  if(this.state.filtervalue==2){
+    var temp=this.props.customers;
+    var temp1=[];
+    for(var i=0;i<temp.length;i++){
+      if(temp[i].orders_count==value ){
+        temp1.push(temp[i])
+      }
+    }
+    console.log('temp1',temp1);
+    this.state.filtercustomers=temp1;
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'customers/getavailindexdata',
+      aipayload: 
+        temp1,
+      /* callback: () => {
+        this.setState({
+          filtercustomers: [],
+        });
+      }, */
+    });
+  }
+  
+}
+handleChangeselect=(value)=>{
+  console.log(value);
+ this.setState({filtervalue:value})
+}
+handleChangeSort=(value)=>{
+  console.log(value);
+  this.setState({sortvalue:value});
+
+  if(value==0){
+
+    var byupdate=[];
+    byupdate=this.props.avaicustomers;
+    byupdate.sort(function(a,b){
+      return a.updated_at<b.updated_at?1:-1;
+    });
+    console.log('byupdate',byupdate)
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'customers/getavailindexdata',
+      aipayload: 
+     byupdate,
+      /* callback: () => {
+        this.setState({
+          filtercustomers: [],
+        });
+      }, */
+    });
+
+  }else if(value==1){
+
+    var byupdate=[];
+    byupdate=this.props.avaicustomers;
+    byupdate.sort(function(a,b){
+      return a.updated_at<b.updated_at?1:-1;
+    });
+
+    var reversebyu=[];
+    for(var m=byupdate.length-1;m>=0;m--){
+      reversebyu.push(byupdate[m])
+  }
+  const { dispatch } = this.props;
+  dispatch({
+    type: 'customers/getavailindexdata',
+    aipayload: 
+    reversebyu,
+    /* callback: () => {
+      this.setState({
+        filtercustomers: [],
+      });
+    }, */
+  });
+
+
+
+  }else if(value==2){
+
+    var bySpent=[];
+    bySpent=this.props.avaicustomers;
+    bySpent.sort(function(a,b){
+      return a.total_spent-b.total_spent;
+    });
+    console.log('sort:',bySpent)
+    var reversebys=[];
+    for(var m=bySpent.length-1;m>=0;m--){
+      reversebys.push(bySpent[m])
+  }
+  const { dispatch } = this.props;
+  dispatch({
+    type: 'customers/getavailindexdata',
+    aipayload: 
+    reversebys,
+    /* callback: () => {
+      this.setState({
+        filtercustomers: [],
+      });
+    }, */
+  });
+  }else if(value==3){
+    
+    var byOrders=[];
+    byOrders=this.props.avaicustomers;
+    byOrders.sort(function(a,b){
+      return a.orders_count-b.orders_count;
+    });
+    console.log('sort:',byOrders)
+    var reversebyo=[];
+    for(var m=byOrders.length-1;m>=0;m--){
+      reversebyo.push(byOrders[m])
+  }
+  const { dispatch } = this.props;
+  dispatch({
+    type: 'customers/getavailindexdata',
+    aipayload: 
+    reversebyo,
+    /* callback: () => {
+      this.setState({
+        filtercustomers: [],
+      });
+    }, */
+  });
+  }
+}
+ /* ------------------------------ */
  handleEdit(selectedrows){
   const { dispatch } = this.props;
-  this.props.history.push("/customers/editcustomers");
+  
   console.log(selectedrows);
   dispatch({
     type: 'customers/getedit',
     apayload: 
-      selectedrows
+      [selectedrows]
  /*    callback: () => {
       this.setState({
         selectedRowKeys: [],
@@ -196,6 +383,11 @@ componentDidMount() {
   dispatch({
     type: 'customers/fetch',
   });
+   dispatch({
+    type: 'customers/getavail',
+  });
+    
+  
 }
   /* =-------------------------------*/
  
@@ -215,59 +407,22 @@ handleModalVisible = flag => {
 /* ------------------------------------- */
 
   render() {
-    const data=this.props.customers;
+    var data=this.props.avaicustomers;
     const columns=this.columns;
     const { selectedRowKeys } = this.state;
     const rowSelection = {
       selectedRowKeys,
       onChange: this.onSelectChange,
-      hideDefaultSelections: true,
-      selections: [
-        {
-          key: 'all-data',
-          text: 'Select All Data',
-          onSelect: () => {
-            this.setState({
-              selectedRowKeys: [...Array(this.state.pagination.pageSize).keys()], // 0...45
-            });
-          },
-        },
-        {
-          key: 'odd',
-          text: 'Select Odd Row',
-          onSelect: changableRowKeys => {
-            let newSelectedRowKeys = [];
-            newSelectedRowKeys = changableRowKeys.filter((key, index) => {
-              if (index % 2 !== 0) {
-                return false;
-              }
-              return true;
-            });
-            this.setState({ selectedRowKeys: newSelectedRowKeys });
-          },
-        },
-        {
-          key: 'even',
-          text: 'Select Even Row',
-          onSelect: changableRowKeys => {
-            let newSelectedRowKeys = [];
-            newSelectedRowKeys = changableRowKeys.filter((key, index) => {
-              if (index % 2 !== 0) {
-                return true;
-              }
-              return false;
-            });
-            this.setState({ selectedRowKeys: newSelectedRowKeys });
-          },
-        },
-      ],
+    
+     
     };
+    const { Search } = Input;
 
     return (
  
       <div>
        {console.log('顾客：----------------',this.props.customers)}
-     {console.log('分页大小',this.state.pagination.pageSize)}
+       {console.log('赛选顾客：----------------',this.props.avaicustomers)}
         <PageHeaderWrapper title="客户">
         
           <Card>
@@ -285,28 +440,40 @@ handleModalVisible = flag => {
              </div>
               <br/>
           <div style={{display:'flex',justifyContent:'space-between'}}>
-          <Select defaultValue='0' style={{width:'150px'}}>
+          <Select onChange={(value)=>this.handleChangeselect(value)} id='search' defaultValue='0' style={{width:'150px'}}>
             <Option value='0'>Select a filter</Option>
+          
             <Option value='1'>Money spent</Option>
+       
+            
             <Option value='2'>Number of orders</Option>
-            <Option value='3'>Placed an order</Option>
-            <Option value='4'>Date created</Option>
-            <Option value='5'>Accepts email marketing</Option>
-            <Option value='6'>Abandoned order</Option>
-            <Option value='7'>Account status</Option>
-            <Option value='8'>Tagged with</Option>
-            <Option value='9'>Located in</Option>
+         
           </Select>
           
-          <InputSearchInput />
+          <div className={styles.container}>
+    <div id="components-input-demo-search-input">
+      <div>
+        
+        <Search
+          placeholder="input search text"
+        
+          onSearch={value =>this.handleSearch(value)}
+          style={{
+            width: 750,
+          }}
+        />
+        
+
+      </div>
+    </div>
+  </div>
           <div style={{width:'150px',textAlign:'center'}}>Sort by</div>
-          <Select defaultValue='0' style={{width:'150px'}}>
+          <Select onChange={(value)=>this.handleChangeSort(value)} defaultValue='0' style={{width:'150px'}}>
             <Option value='0'>Newest update</Option>
             <Option value='1'>Oldest update</Option>
             <Option value='2'>Most spent</Option>
             <Option value='3'>Most orders</Option>
-            <Option value='4'>Customer A-Z</Option>
-            <Option value='5'>Customer Z-A</Option>
+       
           
           </Select>
           </div >
@@ -323,9 +490,7 @@ handleModalVisible = flag => {
               rowSelection={rowSelection} 
               columns={columns} 
               dataSource={data} 
-              pagination={  
-               this.state.pagination
-              }
+          
               scroll={{ y: 500 }} 
               />;
 
